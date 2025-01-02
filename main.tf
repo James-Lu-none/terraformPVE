@@ -6,23 +6,33 @@ terraform {
   }
 }
 
-variable "username" {
-  description = "Proxmox username"
+
+variable "virtual_environment_endpoint" {
+  description = "Proxmox virtual environment endpoint"
   type        = string
 }
 
-variable "password" {
-  description = "Proxmox password"
+variable "virtual_environment_api_token" {
+  description = "Proxmox virtual environment api token"
   type        = string
   sensitive   = true
 }
 
-provider "proxmox" {
-  endpoint = "https://192.168.0.100:8006/"
-  insecure = true
-  username = var.username
-  password = var.password
+variable "virtual_environment_ssh_username" {
+  description = "Proxmox virtual environment ssh username"
+  type        = string
 }
+
+provider "proxmox" {
+  endpoint = var.virtual_environment_endpoint
+  api_token = var.virtual_environment_api_token
+  insecure = true
+  ssh {
+    agent = true
+    username = var.virtual_environment_ssh_username
+  }
+}
+
 
 resource "proxmox_vm_qemu" "vm-instance" {
   name = "test-vm"
