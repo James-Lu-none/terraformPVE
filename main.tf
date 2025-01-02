@@ -6,27 +6,22 @@ terraform {
   }
 }
 
-variable "pm_api_token_id" {
-  description = "Proxmox API Token ID"
+variable "username" {
+  description = "Proxmox username"
   type        = string
 }
 
-variable "pm_api_token_secret" {
-  description = "Proxmox API Token Secret"
+variable "password" {
+  description = "Proxmox password"
   type        = string
   sensitive   = true
 }
 
-variable "pm_api_url" {
-  description = "Proxmox API URL"
-  type        = string
-}
-
 provider "proxmox" {
-  pm_api_url          = var.pm_api_url
-  pm_api_token_id     = var.pm_api_token_id
-  pm_api_token_secret = var.pm_api_token_secret
-  pm_tls_insecure     = true
+  endpoint = "https://192.168.0.100:8006/"
+  insecure = true
+  username = var.username
+  password = var.password
 }
 
 resource "proxmox_vm_qemu" "vm-instance" {
